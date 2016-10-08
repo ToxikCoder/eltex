@@ -1,0 +1,149 @@
+   PID TTY      STAT   TIME COMMAND
+     1 ?        Ss     0:01 /sbin/init
+     2 ?        S      0:00 [kthreadd]
+     3 ?        S      0:00 [ksoftirqd/0]
+     5 ?        S<     0:00 [kworker/0:0H]
+     7 ?        S      0:00 [rcu_sched]
+     8 ?        S      0:00 [rcu_bh]
+     9 ?        S      0:00 [migration/0]
+    10 ?        S      0:00 [watchdog/0]
+    11 ?        S      0:00 [watchdog/1]
+    12 ?        S      0:00 [migration/1]
+    13 ?        S      0:00 [ksoftirqd/1]
+    15 ?        S<     0:00 [kworker/1:0H]
+    16 ?        S<     0:00 [khelper]
+    17 ?        S      0:00 [kdevtmpfs]
+    18 ?        S<     0:00 [netns]
+    19 ?        S      0:00 [khungtaskd]
+    20 ?        S<     0:00 [writeback]
+    21 ?        SN     0:00 [ksmd]
+    22 ?        SN     0:00 [khugepaged]
+    23 ?        S<     0:00 [crypto]
+    24 ?        S<     0:00 [kintegrityd]
+    25 ?        S<     0:00 [bioset]
+    26 ?        S<     0:00 [kblockd]
+    28 ?        S      0:00 [kswapd0]
+    29 ?        S<     0:00 [vmstat]
+    30 ?        S      0:00 [fsnotify_mark]
+    36 ?        S<     0:00 [kthrotld]
+    38 ?        S<     0:00 [ipv6_addrconf]
+    39 ?        S<     0:00 [deferwq]
+    75 ?        S<     0:00 [ata_sff]
+    76 ?        S      0:00 [scsi_eh_0]
+    77 ?        S<     0:00 [scsi_tmf_0]
+    78 ?        S      0:00 [scsi_eh_1]
+    79 ?        S<     0:00 [scsi_tmf_1]
+    81 ?        S<     0:00 [mpt_poll_0]
+    82 ?        S<     0:00 [mpt/0]
+    84 ?        S      0:00 [khubd]
+    85 ?        S<     0:00 [kpsmoused]
+    89 ?        S      0:00 [scsi_eh_2]
+    90 ?        S<     0:00 [scsi_tmf_2]
+    96 ?        S<     0:00 [kworker/1:1H]
+    97 ?        S<     0:00 [kworker/0:1H]
+   117 ?        S      0:00 [jbd2/sda1-8]
+   118 ?        S<     0:00 [ext4-rsv-conver]
+   149 ?        S      0:00 [kauditd]
+   157 ?        Ss     0:00 /lib/systemd/systemd-journald
+   162 ?        Ss     0:00 /lib/systemd/systemd-udevd
+   223 ?        S<     0:00 [ttm_swap]
+   392 ?        Ss     0:00 /sbin/rpcbind -w
+   401 ?        Ss     0:00 /sbin/rpc.statd
+   406 ?        S<     0:00 [rpciod]
+   408 ?        S<     0:00 [nfsiod]
+   415 ?        Ss     0:00 /usr/sbin/rpc.idmapd
+   417 ?        Ssl    0:00 /usr/lib/accountsservice/accounts-daemon
+   419 ?        Ssl    0:00 /usr/sbin/NetworkManager --no-daemon
+   421 ?        Ss     0:00 /usr/sbin/atd -f
+   423 ?        Ss     0:00 /usr/sbin/cron -f
+   425 ?        Ssl    0:00 /usr/sbin/ModemManager
+   427 ?        Ss     0:00 /lib/systemd/systemd-logind
+   432 ?        Ss     0:00 avahi-daemon: running [debvirtualenv.local]
+   433 ?        Ss     0:00 /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation
+   486 ?        Ss     0:00 /usr/sbin/minissdpd -i 0.0.0.0
+   688 ?        S      0:00 avahi-daemon: chroot helper
+   698 ?        Ssl    0:00 /usr/sbin/rsyslogd -n
+   701 ?        Ss     0:00 /usr/sbin/acpid
+   704 ?        Ssl    0:00 /usr/lib/policykit-1/polkitd --no-debug
+   707 tty1     Ss+    0:00 /sbin/agetty --noclear tty1 linux
+   726 ?        Ssl    0:00 /usr/sbin/gdm3
+   730 ?        Ss     0:00 /usr/sbin/exim4 -bd -q30m
+   735 ?        S<     0:00 [cfg80211]
+   745 tty7     Ssl+   3:11 /usr/bin/Xorg :0 -novtswitch -background none -noreset -verbose 3 -auth /var/run/gdm3/auth-for-Debian-gdm-JzJdPD/database -seat seat0 -nolisten tcp vt7
+   755 ?        S      0:00 /sbin/dhclient -d -q -sf /usr/lib/NetworkManager/nm-dhcp-helper -pf /var/run/dhclient-eth0.pid -lf /var/lib/NetworkManager/dhclient-b60f0e11-89cf-4fcf-8119-1fea3a4e5834-eth0.lease -cf /var/lib/NetworkManager/dhclient-eth0.conf eth0
+   800 ?        Ss     0:00 /lib/systemd/systemd --user
+   801 ?        S      0:00 (sd-pam)  
+   849 ?        Ssl    0:00 /usr/lib/upower/upowerd
+   867 ?        Ssl    0:00 /usr/lib/colord/colord
+   874 ?        S<l    0:00 /usr/bin/pulseaudio --start --log-target=syslog
+   875 ?        SNsl   0:00 /usr/lib/rtkit/rtkit-daemon
+   909 ?        Ss     0:00 /sbin/wpa_supplicant -u -s -O /run/wpa_supplicant
+   910 ?        Ssl    0:00 /usr/lib/packagekit/packagekitd
+   924 ?        Sl     0:00 gdm-session-worker [pam/gdm-password]
+   927 ?        Ss     0:00 /lib/systemd/systemd --user
+   928 ?        S      0:00 (sd-pam)  
+   932 ?        Sl     0:00 /usr/bin/gnome-keyring-daemon --daemonize --login
+   935 ?        Ssl    0:00 x-session-manager
+   972 ?        Ss     0:00 /usr/bin/ssh-agent /usr/bin/dbus-launch --exit-with-session x-session-manager
+   975 ?        S      0:00 /usr/bin/dbus-launch --exit-with-session x-session-manager
+   976 ?        Ss     0:00 /usr/bin/dbus-daemon --fork --print-pid 5 --print-address 7 --session
+   979 ?        Sl     0:00 /usr/lib/at-spi2-core/at-spi-bus-launcher
+   983 ?        S      0:00 /usr/bin/dbus-daemon --config-file=/etc/at-spi2/accessibility.conf --nofork --print-address 3
+   986 ?        Sl     0:00 /usr/lib/at-spi2-core/at-spi2-registryd --use-gnome-session
+   993 ?        Sl     0:00 /usr/lib/gnome-settings-daemon/gnome-settings-daemon
+  1011 ?        Sl     0:00 /usr/lib/gvfs/gvfsd
+  1017 ?        S<l    0:06 /usr/bin/pulseaudio --start
+  1022 ?        Sl     0:00 /usr/lib/gvfs/gvfsd-fuse /run/user/1000/gvfs -f -o big_writes
+  1027 ?        S      0:00 /bin/sh /usr/bin/start-pulseaudio-x11
+  1028 ?        S      0:00 /usr/bin/xprop -root -spy
+  1035 ?        Sl     0:00 /usr/lib/gvfs/gvfs-udisks2-volume-monitor
+  1037 ?        Ssl    0:00 /usr/lib/udisks2/udisksd --no-debug
+  1046 ?        Sl     0:00 /usr/lib/gvfs/gvfs-mtp-volume-monitor
+  1050 ?        Sl     0:00 /usr/lib/gvfs/gvfs-afc-volume-monitor
+  1055 ?        Sl     0:00 /usr/lib/gvfs/gvfs-goa-volume-monitor
+  1058 ?        Sl     0:00 /usr/lib/gnome-online-accounts/goa-daemon
+  1065 ?        Sl     0:00 /usr/lib/telepathy/mission-control-5
+  1067 ?        Sl     0:00 /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+  1072 ?        Sl    12:54 /usr/bin/gnome-shell
+  1081 ?        Sl     0:00 /usr/lib/gnome-settings-daemon/gsd-printer
+  1093 ?        Sl     0:00 /usr/lib/gnome-shell/gnome-shell-calendar-server
+  1100 ?        Sl     0:00 /usr/lib/evolution/evolution-source-registry
+  1109 ?        SNl    0:00 /usr/lib/tracker/tracker-miner-apps
+  1110 ?        Sl     0:00 /usr/bin/python /usr/share/system-config-printer/applet.py
+  1112 ?        Sl     0:00 /usr/lib/evolution/3.12/evolution-alarm-notify
+  1114 ?        SNl    0:00 /usr/lib/tracker/tracker-extract
+  1124 ?        Sl     0:00 /usr/lib/evolution/evolution-calendar-factory
+  1127 ?        SNl    0:00 /usr/lib/tracker/tracker-miner-fs
+  1130 ?        Sl     0:00 /usr/lib/tracker/tracker-store
+  1135 ?        Sl     0:00 nm-applet
+  1142 ?        SNl    0:00 /usr/lib/tracker/tracker-miner-user-guides
+  1155 ?        Sl     0:00 zeitgeist-datahub
+  1167 ?        S      0:00 /usr/lib/x86_64-linux-gnu/gconf/gconfd-2
+  1174 ?        Sl     0:00 /usr/bin/zeitgeist-daemon
+  1185 ?        Sl     0:00 /usr/lib/gvfs/gvfsd-metadata
+  1189 ?        Sl     0:00 /usr/lib/x86_64-linux-gnu/zeitgeist-fts
+  1209 ?        S      0:00 /bin/cat
+  1479 ?        S      0:00 dbus-launch --autolaunch=1e482927c1b84bd2920f72619e8e6fef --binary-syntax --close-stderr
+  1480 ?        Ss     0:00 /usr/bin/dbus-daemon --fork --print-pid 5 --print-address 7 --session
+  1484 ?        Sl     0:00 /usr/lib/dconf/dconf-service
+  1532 ?        Sl     0:00 /usr/lib/gvfs/gvfsd-trash --spawner :1.8 /org/gtk/gvfs/exec_spaw/0
+  1542 ?        Sl     0:00 /usr/lib/gvfs/gvfsd-burn --spawner :1.8 /org/gtk/gvfs/exec_spaw/1
+  1581 ?        Sl     0:00 /usr/lib/dconf/dconf-service
+  2166 ?        Sl     0:00 gdm-session-worker [pam/gdm-password]
+  2277 ?        S      0:06 [kworker/0:2]
+  2644 ?        Sl     0:15 /usr/lib/gnome-terminal/gnome-terminal-server
+  2647 ?        S      0:00 gnome-pty-helper
+  3299 ?        S      0:00 [kworker/u256:1]
+  3362 pts/1    Ss     0:00 bash
+  3522 pts/1    S+     0:00 script
+  3523 pts/1    S+     0:00 script
+  3524 pts/0    Ss     0:00 bash -i
+  3695 ?        Sl     0:00 gdm-session-worker [pam/gdm-password]
+  4248 ?        Sl     0:00 gdm-session-worker [pam/gdm-password]
+  4708 ?        S      0:00 [kworker/1:2]
+  4927 ?        S      0:00 [kworker/1:1]
+  5271 ?        S      0:00 [kworker/u256:2]
+  5422 ?        S      0:00 [kworker/0:1]
+  5431 ?        S      0:00 [kworker/1:0]
+  5459 ?        S      0:00 [kworker/0:0]
+  5464 pts/0    R+     0:00 ps -ax

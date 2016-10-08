@@ -1,0 +1,53 @@
+   PID TTY      STAT   TIME COMMAND
+   927 ?        Ss     0:00 /lib/systemd/systemd --user
+   928 ?        S      0:00 (sd-pam)  
+   932 ?        Sl     0:00 /usr/bin/gnome-keyring-daemon --daemonize --login
+   935 ?        Ssl    0:00 x-session-manager
+   972 ?        Ss     0:00 /usr/bin/ssh-agent /usr/bin/dbus-launch --exit-with-session x-session-manager
+   975 ?        S      0:00 /usr/bin/dbus-launch --exit-with-session x-session-manager
+   976 ?        Ss     0:00 /usr/bin/dbus-daemon --fork --print-pid 5 --print-address 7 --session
+   979 ?        Sl     0:00 /usr/lib/at-spi2-core/at-spi-bus-launcher
+   983 ?        S      0:00 /usr/bin/dbus-daemon --config-file=/etc/at-spi2/accessibility.conf --nofork --print-address 3
+   986 ?        Sl     0:00 /usr/lib/at-spi2-core/at-spi2-registryd --use-gnome-session
+   993 ?        Sl     0:00 /usr/lib/gnome-settings-daemon/gnome-settings-daemon
+  1011 ?        Sl     0:00 /usr/lib/gvfs/gvfsd
+  1017 ?        S<l    0:06 /usr/bin/pulseaudio --start
+  1022 ?        Sl     0:00 /usr/lib/gvfs/gvfsd-fuse /run/user/1000/gvfs -f -o big_writes
+  1027 ?        S      0:00 /bin/sh /usr/bin/start-pulseaudio-x11
+  1028 ?        S      0:00 /usr/bin/xprop -root -spy
+  1035 ?        Sl     0:00 /usr/lib/gvfs/gvfs-udisks2-volume-monitor
+  1046 ?        Sl     0:00 /usr/lib/gvfs/gvfs-mtp-volume-monitor
+  1050 ?        Sl     0:00 /usr/lib/gvfs/gvfs-afc-volume-monitor
+  1055 ?        Sl     0:00 /usr/lib/gvfs/gvfs-goa-volume-monitor
+  1058 ?        Sl     0:00 /usr/lib/gnome-online-accounts/goa-daemon
+  1065 ?        Sl     0:00 /usr/lib/telepathy/mission-control-5
+  1067 ?        Sl     0:00 /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+  1072 ?        Sl    12:54 /usr/bin/gnome-shell
+  1081 ?        Sl     0:00 /usr/lib/gnome-settings-daemon/gsd-printer
+  1093 ?        Sl     0:00 /usr/lib/gnome-shell/gnome-shell-calendar-server
+  1100 ?        Sl     0:00 /usr/lib/evolution/evolution-source-registry
+  1109 ?        SNl    0:00 /usr/lib/tracker/tracker-miner-apps
+  1110 ?        Sl     0:00 /usr/bin/python /usr/share/system-config-printer/applet.py
+  1112 ?        Sl     0:00 /usr/lib/evolution/3.12/evolution-alarm-notify
+  1114 ?        SNl    0:00 /usr/lib/tracker/tracker-extract
+  1124 ?        Sl     0:00 /usr/lib/evolution/evolution-calendar-factory
+  1127 ?        SNl    0:00 /usr/lib/tracker/tracker-miner-fs
+  1130 ?        Sl     0:00 /usr/lib/tracker/tracker-store
+  1135 ?        Sl     0:00 nm-applet
+  1142 ?        SNl    0:00 /usr/lib/tracker/tracker-miner-user-guides
+  1155 ?        Sl     0:00 zeitgeist-datahub
+  1167 ?        S      0:00 /usr/lib/x86_64-linux-gnu/gconf/gconfd-2
+  1174 ?        Sl     0:00 /usr/bin/zeitgeist-daemon
+  1185 ?        Sl     0:00 /usr/lib/gvfs/gvfsd-metadata
+  1189 ?        Sl     0:00 /usr/lib/x86_64-linux-gnu/zeitgeist-fts
+  1209 ?        S      0:00 /bin/cat
+  1532 ?        Sl     0:00 /usr/lib/gvfs/gvfsd-trash --spawner :1.8 /org/gtk/gvfs/exec_spaw/0
+  1542 ?        Sl     0:00 /usr/lib/gvfs/gvfsd-burn --spawner :1.8 /org/gtk/gvfs/exec_spaw/1
+  1581 ?        Sl     0:00 /usr/lib/dconf/dconf-service
+  2644 ?        Sl     0:15 /usr/lib/gnome-terminal/gnome-terminal-server
+  2647 ?        S      0:00 gnome-pty-helper
+  3362 pts/1    Ss     0:00 bash
+  3522 pts/1    S+     0:00 script
+  3523 pts/1    S+     0:00 script
+  3524 pts/0    Ss     0:00 bash -i
+  5463 pts/0    R+     0:00 ps -x

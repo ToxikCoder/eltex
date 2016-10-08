@@ -1,0 +1,6 @@
+USER        PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+user       3362  0.0  0.1  25892  5900 pts/1    Ss   21:17   0:00 bash
+user       3522  0.0  0.0  16272  2244 pts/1    S+   21:25   0:00 script
+user       3523  0.0  0.0  16276  1088 pts/1    S+   21:25   0:00 script
+user       3524  0.0  0.1  26028  5964 pts/0    Ss   21:25   0:00 bash -i
+user       5462  0.0  0.0  19100  2576 pts/0    R+   23:54   0:00 ps -u

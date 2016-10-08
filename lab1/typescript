@@ -1,0 +1,11 @@
+Script started on Сб 08 окт 2016 23:57:18
+]0;user@debvirtualenv: ~/eltex/lab1user@debvirtualenv:~/eltex/lab1$ cp randomfile randomfile [K1
+]0;user@debvirtualenv: ~/eltex/lab1user@debvirtualenv:~/eltex/lab1$ ls
+Makefile  psa.log  psax.log  pse.log  psu.log  psx.log  randomfile  randomfile1  start.sh  test.c  test.cpp  typescript
+]0;user@debvirtualenv: ~/eltex/lab1user@debvirtualenv:~/eltex/lab1$ unlink randomfile1
+]0;user@debvirtualenv: ~/eltex/lab1user@debvirtualenv:~/eltex/lab1$ exit[K[K[K[Kls
+Makefile  psa.log  psax.log  pse.log  psu.log  psx.log  randomfile  start.sh  test.c  test.cpp  typescript
+]0;user@debvirtualenv: ~/eltex/lab1user@debvirtualenv:~/eltex/lab1$ exit
+exit
+
+Script done on Сб 08 окт 2016 23:57:45
