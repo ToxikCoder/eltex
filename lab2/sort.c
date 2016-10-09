@@ -20,7 +20,8 @@ int inp_str(char* string, int maxlen)
 
 void out_str(char* string, int length, int number)
 {
-	
+	//????????????????????????????????
+	printf("%s", string);
 }
 
 void swap(char* i, char* j)
@@ -70,13 +71,14 @@ int main()
 	int result = inp_str(string, MAXLEN);
 	if(result > 0)
 	{
-		printf("%d symbols read: %s", result, string);
+		printf("%d symbols read\n", result);
 		result = sort(string, result, ASCENDING);
 		if(result > 0)
 		{
 			//sorted successfully
-			printf("%d reshuffles, resulting string: %s", result, string);
-
+			printf("%d reshuffles\n", result);
+			//??????
+			out_str(string, 0, 0);
 		}
 	}
 
