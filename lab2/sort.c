@@ -79,6 +79,7 @@ int main()
 			printf("%d reshuffles\n", result);
 			//??????
 			out_str(string, 0, 0);
+			printf("\n");
 		}
 	}
 
