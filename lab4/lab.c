@@ -4,7 +4,34 @@
 #include <string.h>
 #include <stdbool.h>
 
-typedef enum {SUCCESS, NO_INPUT_FILE, NO_OUTPUT_FILE, MODE_UNDEFINED, MODE_UNSUPPORTED, INPUT_CANNOT_READ, OUTPUT_CANNOT_WRITE} PARSE_RESULT;
+typedef enum {SUCCESS, NO_INPUT_FILE, NO_OUTPUT_FILE, MODE_UNDEFINED, MODE_UNSUPPORTED, INPUT_CANNOT_READ, OUTPUT_CANNOT_WRITE, FAILURE} PARSE_RESULT;
+
+static int processBySymbol(FILE* input, FILE* output)
+{
+if(input == NULL || output == NULL) return -1;
+int buf;
+do
+{
+	buf = fgetc(input);
+	if(feof(input)) break;
+	
+	//write zero instead of o
+	if(buf == 'o' || buf == 'O')
+	{
+		fputc('0', output);
+		continue;
+	}
+	//write 1 instead of i
+	if(buf == 'i' || buf == 'I')
+	{
+		fputc('1', output);
+		continue;
+	}
+	fputc(buf, output);
+}
+while(1);
+return 0;
+}
 
 static PARSE_RESULT process(const char* input, const char* output, const char* mode)
 {
@@ -15,7 +42,16 @@ if(in == NULL) return INPUT_CANNOT_READ;
 out = fopen(output, "w");
 if(out == NULL) return OUTPUT_CANNOT_WRITE;
 
-
+if(strcmp(mode, "BY_SYMB") == 0)
+{
+	if(processBySymbol(in, out) != 0)
+		return FAILURE;
+}
+else if(strcmp(mode, "BY_STR") == 0)
+{
+	if(processBySymbol(in, out) != 0)
+		return FAILURE;
+}
 
 fclose(in);
 fclose(out);
