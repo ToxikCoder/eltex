@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -33,6 +34,30 @@ while(1);
 return 0;
 }
 
+static int processByString(FILE* input, FILE* output)
+{
+if(input == NULL || output == NULL) return -1;
+char* buf = NULL;
+size_t len = 0;
+ssize_t size = 0;
+char* p = NULL;
+do
+{
+	size = getline(&buf, &len, input);
+	if(size == -1) break;
+	p = strchr(buf, 'x');
+	while(p != NULL)
+	{
+		*p = '*';
+		p = strchr(buf, 'x');
+	}
+	fprintf(output, "%d symbols processed.\n%s", (int)size, buf);
+}
+while(1);
+if(buf) free(buf);
+return 0;
+}
+
 static PARSE_RESULT process(const char* input, const char* output, const char* mode)
 {
 FILE *in, *out;
@@ -49,7 +74,7 @@ if(strcmp(mode, "BY_SYMB") == 0)
 }
 else if(strcmp(mode, "BY_STR") == 0)
 {
-	if(processBySymbol(in, out) != 0)
+	if(processByString(in, out) != 0)
 		return FAILURE;
 }
 
