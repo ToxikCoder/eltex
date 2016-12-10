@@ -3,5 +3,5 @@ lab: lab.c
 	gcc lab.c -o funcproc $(CFLAGS)
 clean:
 	@echo "Cleaning up..."
-	@rm funcprocess
-	@rm progprocess
+	@rm funcproc
+	
