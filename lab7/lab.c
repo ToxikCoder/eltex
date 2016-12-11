@@ -1,3 +1,4 @@
+#define _POSIX_SOURCE
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -6,6 +7,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #define NUM_WORKERS 4
 #define PERFORMANCE 4
@@ -14,110 +16,100 @@
 
 int capacity = 100;
 
-void work(int in, int out);
-void serve(int in, int out);
+void work(int out);
+void serve();
 
-/* Соглашение
- * База пишет в pipe сколько осталось в шахте, читает единички,
- * вычитая PERFORMANCE на каждую единицу. 
- * Пишет в канал 0, если шахта пуста
- * Работник получает из канала объём шахты, пишет в канал
- * единицу на каждый цикл работы
- */
+static int count = 0;
+static int sleeptime = 0;
+pid_t children[NUM_WORKERS];
+int ins[NUM_WORKERS];
 
-void work(int in, int out)
+static void onHome()
+{
+	fprintf(stdout, "Going home. Worker #%d visited mine %d times and sleeped for %d seconds\n", getpid(), count, sleeptime);
+	fflush(stdout);
+}
+
+void work(int out)
 {
 	pid_t cur_pid = getpid();
 	srand((unsigned) cur_pid);
-	int count = 0;
-	int sleeptime = 0;
-	printf("Worker #%d is going to mine...\n", cur_pid);
+	signal(SIGTERM, onHome);
+	count = 0;
+	sleeptime = 0;
+	fprintf(stdout, "Worker #%d is going to mine...\n", cur_pid);
 	fflush(stdout);
 	int b = 1;
-	int res = 0;
 	while(true)
 	{
-		res = read(in, &capacity, sizeof(int));
-		if(res == 0)
-			exit(1);
-		if(capacity >= 0)
-		{
-			res = write(out, &b, sizeof(int));
-			++count;
-			int sl = rand() % 3 - 1;
-			sleeptime +=  sl;
-			sleep((unsigned)sl);
-		}
-		else
-		{
-			printf("Going home. Worker #%d visited mine %d times and sleeped for %d seconds\n", cur_pid, count, sleeptime);
-			fflush(stdout);
-			exit(0);
-		}
+		write(out, &b, sizeof(int));
+		++count;
+		int sl = rand() % 3;
+		sleeptime +=  sl;
+		fflush(stdout);
+		sleep((unsigned)sl);
 	}
 }
 
-void serve(int in, int out)
+void serve()
 {
-	int buf, res;
-	int z = 0;
+	int buf = 0;
 	while(true)
 	{
 		if(capacity <= 0)
-		{
-			res = write(out, &z, sizeof(int));
-			exit(0);
+		{			
+			printf("All workers finished working\n");
+			for(short i = 0; i < NUM_WORKERS; ++i)
+				kill(children[i], SIGTERM);
+			break;
 		}
+		for(short i = 0; i < NUM_WORKERS; ++i)
+		{
+			read(ins[i], &buf, sizeof(int));
+			if(buf == 1 && capacity >= PERFORMANCE)
+				capacity -= PERFORMANCE;
+			else if(buf ==1 && capacity < PERFORMANCE)
+				capacity = 0;
 
-		res = write(out, &capacity, sizeof(int));
-
-		if(res == -1)
-			exit(-1);
-
-		res = read(in, &buf, sizeof(int));
-		if(res == 0)
-			exit(1);
-		if(buf == 1)
-			capacity -= PERFORMANCE;
+			fprintf(stdout, "Worker #%d extracted %d gold from mine. Left: %d\n", children[i], PERFORMANCE, capacity);
+			fflush(stdout);
+		}
 	}
+	sleep(2);
+	printf("Mine is empty, workers are at base\n");
 }
+
 
 int main(void)
 {
-	//нужно эти два повторить для каждого форка
-	int comm_main[2];
-	int comm_work[2];
-	if((pipe(comm_main) && pipe(comm_work)) != 0)
-		exit(-1);
-
 	pid_t pid;
 	for(short i = 0; i < NUM_WORKERS; ++i)
 	{
+		int comm_main[2];	
+		//pipes initialization
+		if(pipe(comm_main) != 0)
+		{
+			fprintf(stderr, "Error creating pipes for communication\n");
+			fflush(stderr);
+			exit(-1);
+		}
 		fflush(stdout);
 		pid = fork();
 		if(pid == 0)
 		{
-			close(comm_main[WRITE]);
-			close(comm_work[READ]);
-			work(comm_main[READ], comm_work[WRITE]);
-		}
-	}
-	close(comm_main[READ]);
-	close(comm_work[WRITE]);
-	serve(comm_work[READ], comm_main[WRITE]);
 
-	int* status = NULL;
-	while(true)
-	{
-		pid = wait(status);
-		if(pid > 0)
-		{
-			printf("Base: worker #%d finished working\n", pid);
-			fflush(stdout);
+			close(comm_main[READ]);	
+			work(comm_main[WRITE]);
 		}
 		else
-			break;
+		{
+			children[i] = pid;
+			ins[i] = comm_main[READ];
+			close(comm_main[WRITE]);	
+			//serve(comm_main[READ]);
+		}
 	}
-	printf("All workers finished working\n");
+
+	serve();
 	return 0;
 }
