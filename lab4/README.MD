@@ -1,13 +1,17 @@
-#Четвёртая лабораторная работа
-------------------------------
-##Вариант
-Посимвольная обработка - замена символов о и О на 0, замена i и I на 1
-Построчная обработка - в каждой строке замена символа x на *
+# Lab4
 
-------------------------------
-##Как использовать
-- Скомпилировать ```make```
-- Просмотреть справку ```./lab -help```
-- Запустить ```./lab -i <input file> -o <output file> -m <mode>```
+## Task
 
-В файле data находится пример файла для чтения
+By-symbol processing - change о and О to 0, i and I to 1.
+By-string processing - change x to *.
+
+## How to use
+- Compile ```make```
+- Run ```./lab -help``` to see help
+- Run ```./lab -i <input file> -o <output file> -m <mode>```
+
+File *data* is example input file.
+
+**OR**
+
+Use launcher:)

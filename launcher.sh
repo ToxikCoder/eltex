@@ -1,6 +1,14 @@
 #!/bin/bash
 DIALOG=${DIALOG=dialog}
 
+if [ "$DIALOG | grep '[0-9]\{1\}.[0-9]-[0-9]\{1,\}$'" == "" ]
+then
+	echo -e "Missing dependency: \033[0;31mdialog\033[0m"
+	echo "Resolve missing dependencies and run again"
+	exit -1
+fi
+
+
 temp=`mktemp 2>/dev/null` || temp=/temp/test$$
 trap "rm -f $temp" 0 1 2 5 15
 

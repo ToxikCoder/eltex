@@ -1,21 +1,12 @@
 # Lab5
-Лабораторная работа по статическим и динамическим библиотекам
-## Вариант
-Функция возведения в беззнаковую степень
 
-Сигнатура
-```c
-long power(short, unsigned int) 
-```
-## Использование
-1) Перейти в папку с лабой
-	> Выполнить `cd lab5`
-2) Собрать:
-	* для демонтстрации работы со статическими библиотеками 
-		> Выполнить `make static && ./static`
-    
-	* для демонстрации работы с динамическими библиотекам
-		> Выполнить `make dynamic && ./dynamic`
-		
-### Автор
-@ToxikCoder
+STatic and dynamic libraries
+
+## Task
+
+Function: power
+
+## How to use
+
+- For static libraries run `make static && ./static`
+- For dynamic libraries run `make dynamic && ./dynamic`
