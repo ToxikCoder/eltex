@@ -15,39 +15,49 @@
 #define PERFORMANCE 4
 #define READ 0
 #define WRITE 1
+#define WORK_ACCEPTED 1
+#define MINE_EMPTY 0
 
 int capacity = 100;
 
 void work(int out, int empty);
 void serve();
 
-static int count = 0;
-static int sleeptime = 0;
+//static int sleeptime = 0;
 pid_t children[NUM_WORKERS];
 int ins[NUM_WORKERS];
 int empty[NUM_WORKERS];
+int count[NUM_WORKERS];
 
 void work(int out, int empty)
 {
 	pid_t cur_pid = getpid();
 	srand((unsigned) cur_pid);
 	fcntl(empty, F_SETFL, fcntl(empty, F_GETFL) | O_NONBLOCK);
-	count = 0;
-	sleeptime = 0;
+	int sleeptime = 0;
 	fprintf(stdout, "Worker #%d is going to mine...\n", cur_pid);
 	fflush(stdout);
 	int b = 1;
-	int buf = 0;
+	int buf = -1;
 	while(true)
 	{
 		int r = read(empty, &buf, sizeof(int));
 		if(r > 0)
 		{
-			if(buf == 1)
+			if(buf == MINE_EMPTY)
 			{
-				fprintf(stdout, "Going home. Worker #%d visited mine %d times and sleeped for %d seconds\n", getpid(), count, sleeptime);
+				fprintf(stdout, "Going home. Worker #%d sleeped for %d seconds\n", getpid(), sleeptime);
 				fflush(stdout);
 				exit(0);
+			}
+			//if last work was accepted, then start another cycle
+			if(buf == WORK_ACCEPTED)
+			{
+				write(out, &b, sizeof(int));
+				int sl = rand() % 2;
+				sleeptime +=  sl;
+				fflush(stdout);
+				sleep((unsigned)sl);
 			}
 		}
 		else if(r < 0 && errno != EAGAIN)
@@ -55,50 +65,55 @@ void work(int out, int empty)
 			perror("Some error ocurred. THe pipe is possibly closed.");
 			exit(-1);
 		}
-		
-		write(out, &b, sizeof(int));
-		++count;
-		int sl = rand() % 3;
-		sleeptime +=  sl;
-		fflush(stdout);
-		sleep((unsigned)sl);
 	}
+}
+
+void notify_empty_mine()
+{
+	//write 1 to notify about empty mine
+	int mine_empty = MINE_EMPTY;
+	for(short i = 0; i < NUM_WORKERS; ++i)
+		write(empty[i], &mine_empty, sizeof(int));
 }
 
 void serve()
 {
 	int buf = 0;
-	while(true)
+	int last_work_accepted = WORK_ACCEPTED;
+	//write WORK_ACCEPTED to workers, so they start first job cycle
+	for(short i = 0; i < NUM_WORKERS; ++i)
+		write(empty[i], &last_work_accepted, sizeof(int));
+		
+	while(capacity > 0)
 	{
-		if(capacity <= 0)
-			break;
-
 		for(short i = 0; i < NUM_WORKERS; ++i)
 		{
-			if(capacity <= 0)
-			{	
-				int mine_empty = 1;
-				//write 1 to notify about empty mine
-				for(int i = 0; i < NUM_WORKERS; ++i)
-				{
-					write(empty[i], &mine_empty, sizeof(int));
-				}
-			}
-			else
+			read(ins[i], &buf, sizeof(int));
+			if(buf == 1 && capacity > PERFORMANCE)
 			{
-				read(ins[i], &buf, sizeof(int));
-				if(buf == 1 && capacity >= PERFORMANCE)
-					capacity -= PERFORMANCE;
-				else if(buf == 1 && capacity < PERFORMANCE)
-					capacity = 0;
-
-				fprintf(stdout, "Worker #%d extracted %d gold from mine. Left: %d\n", children[i], PERFORMANCE, capacity);
-				fflush(stdout);
+				capacity -= PERFORMANCE;
+				write(empty[i], &last_work_accepted, sizeof(int));
 			}
+			else if(buf == 1 && capacity <= PERFORMANCE)
+			{
+				capacity = 0;
+				notify_empty_mine();
+			}
+			count[i] += 1;
+			fprintf(stdout, "Worker #%d extracted %d gold from mine. Left: %d\n", children[i], PERFORMANCE, capacity);
+			fflush(stdout);
+
+			if(capacity <= 0)
+				break;
 		}
 	}
+
 	sleep(2);
 	fprintf(stdout, "Mine is empty, workers are at base\n");
+	for(short i = 0; i < NUM_WORKERS; ++i)
+	{
+		fprintf(stdout, "Worker #%d visited mine %d times\n", children[i], count[i]);
+	}
 	fflush(stdout);
 }
 
@@ -137,6 +152,6 @@ int main(void)
 	}
 
 	serve();
-
+	sleep(2);
 	return 0;
 }
