@@ -73,7 +73,9 @@ void notify_empty_mine()
 	//write 1 to notify about empty mine
 	int mine_empty = MINE_EMPTY;
 	for(short i = 0; i < NUM_WORKERS; ++i)
+	{
 		write(empty[i], &mine_empty, sizeof(int));
+	}
 }
 
 void serve()
@@ -82,8 +84,9 @@ void serve()
 	int last_work_accepted = WORK_ACCEPTED;
 	//write WORK_ACCEPTED to workers, so they start first job cycle
 	for(short i = 0; i < NUM_WORKERS; ++i)
+	{
 		write(empty[i], &last_work_accepted, sizeof(int));
-		
+	}	
 	while(capacity > 0)
 	{
 		for(short i = 0; i < NUM_WORKERS; ++i)
@@ -125,7 +128,7 @@ int main(void)
 	{
 		int comm_main[2];
 		int empty_notifier[2];	
-		//pipes initialisation
+		//pipes initialization
 		if( (pipe(comm_main) != 0) || (pipe(empty_notifier) != 0) )
 		{
 			fprintf(stderr, "Error creating pipes for communication\n");
@@ -155,3 +158,4 @@ int main(void)
 	sleep(2);
 	return 0;
 }
+

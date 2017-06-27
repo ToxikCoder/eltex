@@ -11,6 +11,6 @@ Finished labs:
 
 ## Launcher
 
-You can use launcher.sh to conveniently running labs. Finished labs are marked with [x](e.g. `Lab1[x]`)
+You can use launcher.sh to run labs conveniently. Finished labs are marked with [x](e.g. `Lab1[x]`)
 
 Launcher depends on `dialog` packet, so make sure to install it first

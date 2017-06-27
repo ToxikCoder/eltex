@@ -1,4 +1,4 @@
-# Lab6
+# Lab6. Processes and `fork()`
 
 Mine of fixed capacity with workers as child processes
 

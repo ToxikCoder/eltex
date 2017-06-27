@@ -1,6 +1,6 @@
 # Lab5
 
-STatic and dynamic libraries
+Static and dynamic libraries
 
 ## Task
 

@@ -1,6 +1,6 @@
-# Lab7
+# Lab7. Pipes
 
-Same task as Lab6, but requires to use pipes
+Same task as Lab6, but requires pipes usage
 
 ## How to use
 

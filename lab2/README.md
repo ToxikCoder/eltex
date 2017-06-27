@@ -4,7 +4,7 @@ Ascending and descending sorting of array of strings.
 
 ## How to use
 
-Run ```make``` and ```./sort```
+Run `make` and `./sort`
 
 **OR**
 
