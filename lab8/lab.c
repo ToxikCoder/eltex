@@ -11,168 +11,137 @@
 #include <unistd.h>
 #include <wait.h>
 
-#define WORKERS 4
+#define NUM_WORKERS 4
 #define PERFORMANCE 4
-#define IN 0
-#define OUT 1
 
-void work(int msgid_in, int msgid_out);
-void pe(int r);
+int main(void);
+void work(int);
+void control(int);
+void check_error(int);
 
 struct msgbuf
 {
-	long mtype;
-	char mtext[1];
+    long mtype;
+    char mtext[1];
 };
 
-void work(int msgid_in, int msgid_out)
-{
-	int count = 0; //счётчик посещений шахты
-	int sleeptime = 0; //общее время сна
-	pid_t pid = getpid();
-	//структура для отправки факта выполнения работы
-	struct msgbuf send;
-	send.mtype = pid;
-	send.mtext[0] = 1;
-	//структура для получения оставшегося объёма
-	struct msgbuf rec;
-	int length = sizeof(struct msgbuf);
-	fprintf(stdout, "Worker #%d is starting to mine...\n", pid);
-	fflush(stdout);
+pid_t children[NUM_WORKERS];
 
-	while(true)
-	{
-		//получаем объём шахты
-		int res = msgrcv(msgid_in, &rec, length, 1, 0);
-		pe(res);
-		//если шахта не пуста
-		if(rec.mtext[0] > 0)
-		{
-			//пишем факт работы
-			res = msgsnd(msgid_out, &send, length, 0);
-			pe(res);
-			printf("#%d worked\n", pid);
-			fflush(stdout);
-			++count;
-			//спим
-			int sl = rand() % 3;
-			sleeptime += sl;
-			sleep((unsigned) sleeptime);
-		}
-		else
-		{
-			fprintf(stdout, "Nothing to mine here. Worker #%d stats:\nVisits: %d, Sleep time: %d", pid, count, sleeptime);
-			fflush(stdout);
-			exit(0);
-		}
-	}
+void check_error(int r)
+{
+    if(r == -1 && errno != ENOMSG)
+    {
+        perror("Error: ");
+        fflush(stdout);
+        exit(-1);
+    }
 }
 
-void pe(int r)
+void work(int msqid)
 {
-	if(r == -1)
-	{
-		perror("Error: ");
-		fflush(stdout);
-		exit(-1);
-	}
+    int count = 0; //mine visits counter
+	int sleeptime = 0; //sleep time
+    pid_t this_worker = getpid();
+    fprintf(stdout, "Worker #%d is going to mine\n", this_worker);
+    fflush(stdout);
+    struct msgbuf rec; //for receiving messages
+    struct msgbuf message; //for sending messages
+    message.mtype = this_worker;
+    message.mtext[0] = 1;
+    sleep(3);
+    bool first = true;
+    while(true)
+    {
+        ssize_t size = msgrcv(msqid, &rec, 1, this_worker, IPC_NOWAIT);
+        check_error(size);
+        if(size == 1 && rec.mtext[0] == 0)
+            break; //0 - mine is empty, stop working
+        if(first || rec.mtext[0] == 2)
+        {
+            //base is processed last delivery, continue mining
+            first = false;
+            int result = msgsnd(msqid, &message, 1, 0);
+            check_error(result);
+            ++count;
+            int sl = rand() % 2;
+            sleeptime += sl;
+            sleep((unsigned) sleeptime);
+        }
+    }
+    fprintf(stdout, "Mine is empty, worker #%d is going home\n", this_worker);
+    fprintf(stdout, "Worker %d visited mine %d times and sleeped for %d\n",
+        this_worker, count, sleeptime);
+    fflush(stdout);
+    exit(0);
+}
+
+void control(int msqid)
+{
+    struct msgbuf message;
+    int capacity = 100;
+    bool mine_empty = false;
+    while(true)
+    {
+        for(short i = 0; i < NUM_WORKERS; ++i)
+        {
+            ssize_t r = msgrcv(msqid, &message, 1, children[i], IPC_NOWAIT);
+            check_error(r);
+
+            if(message.mtext[0] != 1)
+                continue;
+
+            if(capacity != 0)
+            {
+                message.mtype = children[i];
+                message.mtext[0] = 2;
+                int r = msgsnd(msqid, &message, 1, 0);
+                check_error(r);
+                capacity -= PERFORMANCE;
+                fprintf(stdout,
+                    "Mine capacity: %d, worker #%d extracted %d of gold\n",
+                    capacity, children[i], PERFORMANCE);
+                fflush(stdout);
+            }
+            else
+            {
+                mine_empty = true;
+                break;
+            }
+        }
+        if(mine_empty)
+        {
+            message.mtext[0] = 0;
+            for(short i = 0; i < NUM_WORKERS; ++i)
+            {
+                message.mtype = children[i];
+                int result = msgsnd(msqid, &message, 1, 0);
+                check_error(result);
+            }
+            break;
+        }
+    }
 }
 
 int main(void)
 {
-	int workers[4];
-	int capacity = 100;
-	//генерируем ключи для очередей сообщений
-	key_t keys[2];
-	keys[IN] = ftok("/dev/null", '!');
-	keys[OUT] = ftok("/dev/null", '%');
-
-	//создаём очередь сообщений
-	int mid_in = msgget(keys[IN], IPC_CREAT | 0600);
-	int mid_out = msgget(keys[OUT], IPC_CREAT | 0600);
-	//печатаем ошибку и выходим, если произошла ошибка чтения из очереди
-	pe(mid_in);
-	pe(mid_out);
-
-	for(short i = 0; i < WORKERS; ++i)
-	{
-		fflush(stdout);
-		int pid = fork();
-		if(pid == 0)
-			work(mid_out, mid_in);
-		else
-			workers[i] = pid;
-	}
-
-	int length = sizeof(struct msgbuf);
-	//пишем в очередь объём шахты
-	//считываем факт работы
-	
-	//структура для отправки объёма шахты
-	struct msgbuf send;
-	send.mtype = 1;
-	send.mtext[0] = (char) capacity;
-	//структура для принятия сообщений
-	struct msgbuf rec;
-		
-	while(capacity > 0)
-	{	
-		//отправляем объём
-		int res = msgsnd(mid_out, &send, length, 0);
-		pe(res);
-		res = msgsnd(mid_out, &send, length, 0);
-		pe(res);
-		res = msgsnd(mid_out, &send, length, 0);
-		pe(res);
-		res = msgsnd(mid_out, &send, length, 0);
-		pe(res);
-		printf("Messages sent\n");
-		fflush(stdout);
-		sleep(1);
-		//читаем факт добычи золота
-		for(short i = 0; i < WORKERS; ++i)
-		{
-			res = msgrcv(mid_in, &rec, length, workers[i], 0);
-			pe(res);
-			fprintf(stdout, "%d\n", rec.mtext[0]);
-			fflush(stdout);
-			//1-работник произвёл работу, вычитаем из оставшегося объёма производительность
-			if(rec.mtext[0] == 1)
-			{
-				capacity -= PERFORMANCE;
-				send.mtext[0] = capacity;
-				fprintf(stdout, "Capacity: %d", capacity);
-				fflush(stdout); 
-				res = msgsnd(mid_out, &send, length, 0);
-				pe(res);
-				res = msgsnd(mid_out, &send, length, 0);
-				pe(res);
-				res = msgsnd(mid_out, &send, length, 0);
-				pe(res);
-				res = msgsnd(mid_out, &send, length, 0);
-				pe(res);
-			}
-		}
-	}
-	//в шахте больше ничего нет
-	send.mtext[0] = 0;
-	msgsnd(mid_out, &send, 1, 0);
-	msgsnd(mid_out, &send, 1, 0);
-	msgsnd(mid_out, &send, 1, 0);
-	msgsnd(mid_out, &send, 1, 0);
-	//теперь работники должны завершить работу
-	int* status = NULL;
-	while(true)
-	{
-		pid_t pid = wait(status);
-		if(pid > 0)
-			printf("Base: Worker#%d returned from mine\n", pid);
-		else
-			break;
-	}
-	
-	msgctl(mid_in, IPC_RMID, NULL);
-	msgctl(mid_out, IPC_RMID, NULL);
-	printf("All workers are at base");
-	return 0;
+    key_t key = ftok("/dev/null", '!');
+    int queue = msgget(key, IPC_CREAT | 00660);
+    check_error(queue);
+    pid_t child_pid;
+    for(short i = 0; i < NUM_WORKERS; ++i)
+    {
+        child_pid = fork();
+        //child process
+        if(child_pid == 0)
+        {
+            work(queue);
+        }
+        else
+            children[i] = child_pid;
+    }
+    control(queue);
+    sleep(2);
+    int r = msgctl(queue, IPC_RMID, 0);
+    check_error(r);
+    return 0;
 }
