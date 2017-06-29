@@ -2,4 +2,4 @@
 *.out
 .idea
 CMakeLists.txt
-lab?/lab
+lab*/lab
