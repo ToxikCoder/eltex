@@ -8,4 +8,4 @@ Run `make` and `./lab`
 
 **OR**
 
-Just use launcher:)
+Use launcher:)
