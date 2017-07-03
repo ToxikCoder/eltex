@@ -1,6 +1,7 @@
 # Eltex Course labs
 
 Finished labs:
+
 - *Lab1* C and Bash basics
 - *Lab2* Functions and pointers in C
 - *Lab3* Structures and arrays
@@ -8,6 +9,9 @@ Finished labs:
 - *Lab5* Static and dynamic libraries
 - *Lab6* Processes
 - *Lab7* Pipes
+- *Lab8* Message queues
+- *Lab9* Semaphores and shared memory
+- *Lab10* POSIX threads
 
 ## Launcher
 
