@@ -12,6 +12,7 @@ Finished labs:
 - *Lab8* Message queues
 - *Lab9* Semaphores and shared memory
 - *Lab10* POSIX threads
+- *Lab11* Sockets
 
 ## Launcher
 
