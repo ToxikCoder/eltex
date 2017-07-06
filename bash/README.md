@@ -2,4 +2,5 @@
 
 Finished labs:
 
+- *Lab 1*
 

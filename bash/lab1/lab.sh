@@ -59,7 +59,7 @@ function delete {
 		rm -r *
 		exit;
 	fi
-	if [ `echo $dirs | grep -` = "$dirs" ]
+	if [[ `echo $dirs | grep -` = "$dirs" ]]
 	then
 		r=`echo $dirs | sed "s/-/ /"`;
 		range=`seq $r`;
@@ -84,7 +84,7 @@ function delete {
 			then
 				rm -r *
 			else		
-				if [ `echo $subdirs | grep -` = "$subdirs" ]
+				if [[ `echo $subdirs | grep -` = "$subdirs" ]]
 				then
 					r=`echo $subdirs | sed "s/-/ /"`;
 					range=`seq $r`;
@@ -114,7 +114,13 @@ function delete {
 				if [ -d "$j" ]
 				then
 					cd $j				
-					if [ `echo $files | grep -` = "$files" ]
+					if [ "$files" = "all" ]
+					then
+						rm *
+						cd ..
+						continue;
+					fi
+					if [[ `echo $files | grep -` = "$files" ]]
 					then
 						r=`echo $files | sed "s/-/ /"`;
 						range=`seq $r`;
@@ -125,8 +131,10 @@ function delete {
 					do
 						rm $filepat$f
 					done
+					cd ..
 				fi
 			done
+			cd ..
 		fi
 	done
 }
